@@ -8,6 +8,11 @@
                 <div class="card-header">{{ __('Login Author') }}</div>
 
                 <div class="card-body">
+                    @if($errors->any())
+                    <div class="alert alert-danger" role="alert">
+                     {{$errors->first()}}
+                    </div>
+                    @endif
                     <form method="POST" action="{{ route('Login') }}">
                         @csrf
 

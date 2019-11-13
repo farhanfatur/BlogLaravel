@@ -11,7 +11,8 @@
                 <div class="card-body">
                     <p>{{ $data->text }}</p>
                     <hr>
-                    <span>Publish at: {{ $data->created_at }}</span>
+                    <span>Publish at: {{ $data->created_at }}</span><br>
+                    <span>Author : {{ $data->user->name }}</span>
                 </div>
                 <div class="card-footer">
                     <h4>Comment :</h4>
@@ -23,9 +24,10 @@
                     </div>
                     @else
                     @foreach($data->comments as $comment)
+
                         <div class="row">
                             <div class="col-md-12">
-                                <b>{{ $data->user->name }}</b>
+                                <b>{{ $comment->user->name }}</b>
                                 <p>{{ $comment->comment }}</p>
                             </div>
                         </div>
@@ -62,5 +64,13 @@
             </div>
         </div>
     </form>
+    @else
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="jumbotron">
+                <p>Tidak bisa berkomentar silakan <a href="/author">login</a> dahulu</p>
+            </div>
+        </div>
+    </div>
     @endif
 @endsection

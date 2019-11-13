@@ -12,9 +12,9 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
 class UserController extends Controller
 {
-	use AuthenticatesUsers;
+	  use AuthenticatesUsers;
 
-    public function index()
+    public function index(Request $request)
     {
       $post = Post::with('user', 'comments')->paginate(5);
       return view('home', ['post' => $post]);
@@ -36,8 +36,25 @@ class UserController extends Controller
       return redirect()->back();
     }
 
-    public function detailPost($id)
+    public function detailPost(Request $request, $id)
     {
+      if($request->session()->get('post') == null) {
+        $request->session()->push('post', $id);
+
+        $updateVisitor = Post::find(intval($id));
+        $updateVisitor->viewer = $updateVisitor->viewer + 1;
+        $updateVisitor->save();
+      }else {
+        
+        $posts = $request->session()->get('post');
+        if(!in_array($id, $posts)) {
+          $request->session()->push('post', $id);
+          $updateVisitor = Post::find(intval($id));
+          $updateVisitor->viewer = $updateVisitor->viewer + 1;
+          $updateVisitor->save();
+        }
+      }
+
       $post = Post::with('comments', 'user')->where('id', $id)->get();
       return view('post-detail', ['post' => $post]);
     }
@@ -57,10 +74,11 @@ class UserController extends Controller
            }else if($data->getAuthor($request->email)) {
                 return redirect()->route('index');
            }else {
-                dd("akun aktifkan dulu oleh superadmin");
+                Auth::logout();
+                return redirect()->back()->withErrors(['Akun belum aktif silakan hubungi admin']);
            }
     	}else {
-    		dd("Username atau password salah");
+        return redirect()->back()->withErrors(['Username atau Password salah']);
     	}
     }
 }
