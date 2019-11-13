@@ -68,10 +68,10 @@ class UserController extends Controller
     {
         
     	if(Auth::guard('web')->attempt(['email' => $request->email, 'password' => $request->password])) {
-           $data = new User;
-           if($data->getSuperAdmin($request->email)) {
+          
+           if(Auth::user()->getSuperAdmin($request->email)) {
                 return redirect()->route('dashboardSuperadmin');
-           }else if($data->getAuthor($request->email)) {
+           }else if(Auth::user()->getAuthor($request->email)) {
                 return redirect()->route('index');
            }else {
                 Auth::logout();

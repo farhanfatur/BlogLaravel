@@ -51,6 +51,7 @@ Route::group(['prefix' => 'author'], function() {
 		});
 		Route::post('/post/update', 'author\AuthorController@update');
 		Route::post('/post/add', 'author\AuthorController@store');
+		Route::get('/post/comment/{id}', 'author\AuthorController@commentbypost')->name('indexPost');
 		Route::get('/post/detail/{id}', 'author\AuthorController@find');
 		Route::get('/post/edit/{id}', 'author\AuthorController@edit');
 		Route::get('/post/delete/{id}', 'author\AuthorController@delete');

@@ -35,8 +35,24 @@ class AuthorController extends Controller
 
     public function post()
     {
+        $comment = array();
+        $sumComment = array();
+
         $post = User::with('posts')->find($this->idUser());
-        return view('author.post', ['post' => $post]);
+        foreach($post->posts as $data) {
+            $comment[] = Post::with('comments')->find($data->id);
+        }
+
+        foreach($comment as $val) {
+            $sumComment[] = count($val->comments);
+        }
+        return view('author.post', compact('post', 'sumComment'));
+    }
+
+    public function commentbypost($id)
+    {
+        $post = Post::with('comments','user')->find($id);
+        return view('author.post-comment', ['posts' => $post]);
     }
 
     public function store(Request $request)

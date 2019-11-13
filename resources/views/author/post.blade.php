@@ -13,7 +13,7 @@
                     <table class="table table-bordered">
                         <thead>
                             <tr>
-                                <th>No</th><th>Title</th><th>Content</th><th>Author</th><th>View</th><th>Action</th>
+                                <th>No</th><th>Title</th><th>Content</th><th>Author</th><th>View</th><th>Comment</th><th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -25,14 +25,20 @@
                                 <th colspan="5"><center>Nothing post</center></th>
                             </tr>
                             @else
-                            @foreach($post->posts as $data)
+
+                            @foreach($post->posts as $index => $data)
                             <tr>
                                 <td>{{ $i++ }}</td>
                                 <td>{{ $data->title }}</td>
                                 <td>{{ str_limit($data->text, 30, '...') }}</td>
                                 <td>{{ $post->name }}</td>
                                 <td>{{ $data->viewer }}</td>
-                                <td><a href="post/detail/{{ $data->id }}">Detail</a> | <a href="post/edit/{{ $data->id }}">Edit</a> | <a href="post/delete/{{ $data->id }}">Delete</a></td>
+                                @if($sumComment[$index] == 0)
+                                <td>0</td>
+                                @else
+                                <td><a href='post/comment/{{ $data->id }}'>{{ $sumComment[$index] }}</a></td>
+                                @endif
+                                <td><a href="post/edit/{{ $data->id }}">Edit</a> | <a href="post/delete/{{ $data->id }}">Delete</a></td>
                             </tr>
                             @endforeach
                             @endif   
