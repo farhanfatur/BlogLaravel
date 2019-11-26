@@ -41,7 +41,7 @@ class UserController extends Controller
       if($request->session()->get('post') == null) {
         $request->session()->push('post', $title_slug);
 
-        $updateVisitor = Post::where('title_slug', $title_slug)->get();
+        $updateVisitor = Post::where('title_slug', $title_slug)->first();
         $updateVisitor->viewer = $updateVisitor->viewer + 1;
         $updateVisitor->save();
       }else {
@@ -49,7 +49,7 @@ class UserController extends Controller
         $posts = $request->session()->get('post');
         if(!in_array($title_slug, $posts)) {
           $request->session()->push('post', $title_slug);
-          $updateVisitor = Post::where('title_slug', $title_slug)->get();
+          $updateVisitor = Post::where('title_slug', $title_slug)->first();
           $updateVisitor->viewer = $updateVisitor->viewer + 1;
           $updateVisitor->save();
         }
