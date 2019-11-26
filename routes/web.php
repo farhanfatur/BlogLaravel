@@ -17,6 +17,7 @@ Route::get('/', 'UserController@index')->name('index');
 Route::get('post/{title_slug}', 'UserController@detailPost')->name('detailPost');
 Route::post('/comment/store', 'UserController@storeComment')->name('storeComment');
 Route::post('/process/login', 'UserController@login')->name('Login');
+Route::get('/home', 'HomeController@index')->name('home');
 Route::group(['prefix' => 'superadmin'], function() {
 	Route::get('/', 'UserController@indexSuperAdmin');
 	Route::group(['middleware' => 'admin'], function () {
