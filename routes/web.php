@@ -14,7 +14,7 @@
 Auth::routes();
 
 Route::get('/', 'UserController@index')->name('index');
-Route::get('post/{id}/detail', 'UserController@detailPost')->name('detailPost');
+Route::get('post/{title_slug}', 'UserController@detailPost')->name('detailPost');
 Route::post('/comment/store', 'UserController@storeComment')->name('storeComment');
 Route::post('/process/login', 'UserController@login')->name('Login');
 Route::group(['prefix' => 'superadmin'], function() {
@@ -51,7 +51,7 @@ Route::group(['prefix' => 'author'], function() {
 		});
 		Route::post('/post/update', 'author\AuthorController@update');
 		Route::post('/post/add', 'author\AuthorController@store');
-		Route::get('/post/comment/{id}', 'author\AuthorController@commentbypost')->name('indexPost');
+		Route::get('/post/comment/{id}', 'author\AuthorController@commentbypost')->name('indexPostById');
 		Route::get('/post/detail/{id}', 'author\AuthorController@find');
 		Route::get('/post/edit/{id}', 'author\AuthorController@edit');
 		Route::get('/post/delete/{id}', 'author\AuthorController@delete');

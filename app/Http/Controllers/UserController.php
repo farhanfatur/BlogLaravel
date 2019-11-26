@@ -16,7 +16,7 @@ class UserController extends Controller
 
     public function index(Request $request)
     {
-      $post = Post::with('user', 'comments')->paginate(5);
+      $post = Post::with('user', 'comments')->orderBy('id', "desc")->paginate(5);
       return view('home', ['post' => $post]);
     }
 
@@ -36,26 +36,26 @@ class UserController extends Controller
       return redirect()->back();
     }
 
-    public function detailPost(Request $request, $id)
+    public function detailPost(Request $request, $title_slug)
     {
       if($request->session()->get('post') == null) {
-        $request->session()->push('post', $id);
+        $request->session()->push('post', $title_slug);
 
-        $updateVisitor = Post::find(intval($id));
+        $updateVisitor = Post::find($title_slug);
         $updateVisitor->viewer = $updateVisitor->viewer + 1;
         $updateVisitor->save();
       }else {
         
         $posts = $request->session()->get('post');
-        if(!in_array($id, $posts)) {
-          $request->session()->push('post', $id);
-          $updateVisitor = Post::find(intval($id));
+        if(!in_array($title_slug, $posts)) {
+          $request->session()->push('post', $title_slug);
+          $updateVisitor = Post::find($title_slug);
           $updateVisitor->viewer = $updateVisitor->viewer + 1;
           $updateVisitor->save();
         }
       }
 
-      $post = Post::with('comments', 'user')->where('id', $id)->get();
+      $post = Post::with('comments', 'user')->where('title_slug', $title_slug)->get();
       return view('post-detail', ['post' => $post]);
     }
 

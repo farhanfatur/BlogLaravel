@@ -9,7 +9,9 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
-
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Facades\Image;
 class AuthorController extends Controller
 {
 
@@ -57,12 +59,18 @@ class AuthorController extends Controller
 
     public function store(Request $request)
     {
+        $image = str_slug($request->title).".png";
         $request->user()->posts()->create([
             "title" => $request->title,
+            'title_slug' => strtolower(str_slug($request->title)),
             'text' => $request->content,
+            'image' => $image,
             'viewer' => 0,
         ]);
-        
+
+        Storage::putFileAs('public/post/image', $request->file('image'), $image);
+        Image::make(storage_path('app/public/post/image/'.$image))->resize(320, 240)->save(storage_path('app/public/post/thumbnail/thumbnail_'.$image));
+
         return redirect()->route('indexPost');
     }
 
@@ -87,10 +95,32 @@ class AuthorController extends Controller
 
     public function update(Request $request)
     {
+       
+       $image = "edit_".strtolower(str_slug($request->title).".png");
+
         $post = Post::find($request->id);
-        $post->title = $request->title;
-        $post->text = $request->content;
-        $post->save();
+        if($request->photos) {
+            $pathImage = storage_path('app\\public\\post\\image\\'.$post->image);
+            $pathThumbnail = storage_path('app\\public\\post\\thumbnail\\thumbnail_'.$post->image);
+            if(File::exists($pathImage) && File::exists($pathThumbnail)) {
+                File::delete($pathThumbnail);
+                File::delete($pathImage);
+            }
+
+            $post->title = $request->title;
+            $post->title_slug = str_slug($request->title);
+            $post->text = $request->content;
+            $post->image = $image;
+            $post->save();
+            Storage::putFileAs('public/post/image', $request->file('photos'), $image);
+            Image::make(storage_path('app/public/post/image/'.$image))->resize(320, 240)->save(storage_path('app/public/post/thumbnail/thumbnail_'.$image));    
+        }else {
+            $post->title = $request->title;
+            $post->title_slug = str_slug($request->title);
+            $post->text = $request->content;
+            $post->save();
+        }
+        
 
         return redirect()->route('indexPost');
     }

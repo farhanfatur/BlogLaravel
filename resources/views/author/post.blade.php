@@ -22,7 +22,7 @@
                             @endphp
                             @if(count($post->posts) == 0)
                             <tr>
-                                <th colspan="5"><center>Nothing post</center></th>
+                                <th colspan="7"><center>Nothing post</center></th>
                             </tr>
                             @else
 
@@ -38,7 +38,7 @@
                                 @else
                                 <td><a href='post/comment/{{ $data->id }}'>{{ $sumComment[$index] }}</a></td>
                                 @endif
-                                <td><a href="post/edit/{{ $data->id }}">Edit</a> | <a href="post/delete/{{ $data->id }}">Delete</a></td>
+                                <td><a href="post/edit/{{ $data->id }}">Edit</a> | <a href="post/delete/{{ $data->id }}" onclick="return confirm('Are you sure to delete this?')">Delete</a></td>
                             </tr>
                             @endforeach
                             @endif   

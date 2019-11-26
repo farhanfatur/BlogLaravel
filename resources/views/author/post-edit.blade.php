@@ -8,7 +8,7 @@
                 <div class="card-header">Edit Author</div>
 
                 <div class="card-body">
-                        <form method="POST" action="/author/post/update">
+                        <form method="POST" action="/author/post/update" enctype="multipart/form-data">
                             @csrf
                             <input type="hidden" name="id" value="{{ $post->id }}">
                             <div class="form-group row">
@@ -32,6 +32,20 @@
                                     <textarea name="content" cols="60" rows="30" required> {{ $post->text }} </textarea>
 
                                     @error('content')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="content" class="col-md-4 col-form-label text-md-right">Image</label>
+
+                                <div class="col-md-6">
+                                    <input type="file" name="photos" class="form-control">
+                                    <img src="{{ asset('storage/post/thumbnail/thumbnail_'.$post->image) }}" alt="{{ $post->title }}">
+                                    @error('image')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
                                         </span>

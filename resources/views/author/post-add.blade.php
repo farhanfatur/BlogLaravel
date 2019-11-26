@@ -8,7 +8,7 @@
                 <div class="card-header">Add Author</div>
 
                 <div class="card-body">
-                        <form method="POST" action="/author/post/add">
+                        <form method="POST" action="/author/post/add" enctype="multipart/form-data">
                             @csrf
                             
                             <div class="form-group row">
@@ -29,9 +29,23 @@
                                 <label for="content" class="col-md-4 col-form-label text-md-right">Content</label>
 
                                 <div class="col-md-6">
-                                    <textarea name="content" cols="60" rows="30" required> {{ old('content') }} </textarea>
+                                    <textarea name="content" cols="60" rows="20" required> {{ old('content') }} </textarea>
 
                                     @error('content')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="content" class="col-md-4 col-form-label text-md-right">Image</label>
+
+                                <div class="col-md-6">
+                                    <input type="file" name="image">
+
+                                    @error('image')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
                                         </span>
